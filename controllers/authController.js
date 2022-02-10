@@ -106,7 +106,6 @@ const sendTokenResponse = (user, statusCode, res, req) => {
     if (process.env.NODE_ENV === 'production') {
         options.httpOnly = true;
         options.secure = true;
-        console.log(options)
     }
 
 
@@ -115,13 +114,13 @@ const sendTokenResponse = (user, statusCode, res, req) => {
     if (req.secure || req.headers['x-forwarded-proto'] === 'https') {
         options.httpOnly = true;
         options.secure = true;
-
-        console.log(options)
     }
 
 
 
 
+
+    console.log(token)
 
     res.status(200)
         .cookie('amazona_token', token, options)
