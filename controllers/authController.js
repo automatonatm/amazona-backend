@@ -100,16 +100,22 @@ const sendTokenResponse = (user, statusCode, res, req) => {
     };
 
 /*
+
     if (process.env.NODE_ENV === 'production') {
         options.httpOnly = true;
         options.secure = true;
-    }*/
+    }
+
+*/
 
     //Heroku
     if (req.secure || req.headers['x-forwarded-proto'] === 'https') {
         options.httpOnly = true;
         options.secure = true;
     }
+
+
+
 
     res.status(200)
         .cookie('amazona_token', token, options)
