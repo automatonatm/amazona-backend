@@ -99,20 +99,26 @@ const sendTokenResponse = (user, statusCode, res, req) => {
         expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000),
     };
 
-/*
+
+
+
 
     if (process.env.NODE_ENV === 'production') {
         options.httpOnly = true;
         options.secure = true;
+        console.log(options)
     }
 
-*/
+
 
     //Heroku
     if (req.secure || req.headers['x-forwarded-proto'] === 'https') {
         options.httpOnly = true;
         options.secure = true;
+
+        console.log(options)
     }
+
 
 
 
