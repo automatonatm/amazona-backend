@@ -30,7 +30,7 @@ const getAllProducts = catchAsync(async (req, res, next) => {
 
     const name = req.query.name || ''
 
-    if(name) {
+    if(name !== '') {
         filter = {...filter, name: {$regex : name, $options: 'i'}}
     }
 
@@ -47,7 +47,7 @@ const getAllProducts = catchAsync(async (req, res, next) => {
 const getProduct = catchAsync(async (req, res, next) => {
 
     const {productId} = req.params
-    
+
     const product = await Product.findById(productId)
 
     if(!product) return next(new AppError('Product not found', 404))
