@@ -8,6 +8,7 @@ router.use(protect)
 router.route('/')
     .post(placeOrder)
     .get(getUserOrders)
+
 router.route('/:orderId').get(getOrder)
 router.route('/:orderId/pay').post(payOrder)
 

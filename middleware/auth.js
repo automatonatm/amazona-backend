@@ -21,6 +21,7 @@ exports.protect = Async(async (req, res, next) => {
         token = req.cookies.amazona_token;
     }
 
+
     try {
         const decoded = await jwt.verify(token, process.env.JWT_SECRET);
 

@@ -23,7 +23,18 @@ const productSeed = catchAsync(async (req, res, next) => {
 
 const getAllProducts = catchAsync(async (req, res, next) => {
 
-    const products = await Product.find()
+
+   // const {name} = req.query
+
+    let filter = {}
+
+    const name = req.query.name || ''
+
+    if(name) {
+        filter = {...filter, name: {$regex : name, $options: 'i'}}
+    }
+
+    const products = await Product.find(filter)
 
     res.status(200).json({
         status: true,
@@ -36,9 +47,7 @@ const getAllProducts = catchAsync(async (req, res, next) => {
 const getProduct = catchAsync(async (req, res, next) => {
 
     const {productId} = req.params
-
-
-
+    
     const product = await Product.findById(productId)
 
     if(!product) return next(new AppError('Product not found', 404))

@@ -118,10 +118,6 @@ const sendTokenResponse = (user, statusCode, res, req) => {
 
 
 
-
-
-    console.log(token)
-
     res.status(200)
         .cookie('amazona_token', token, options)
         .json({status: true, token})
