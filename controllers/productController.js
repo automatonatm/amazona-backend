@@ -29,10 +29,24 @@ const getAllProducts = catchAsync(async (req, res, next) => {
     let filter = {}
 
     const name = req.query.name || ''
+    const category = req.query.category || ''
 
-    if(name !== '') {
-        filter = {...filter, name: {$regex : name, $options: 'i'}}
-    }
+    const min = req.query.min && Number(req.query.min) !== 0 ? Number(req.query.min) : 0
+    const max = req.query.max && Number(req.query.max) !== 0 ? Number(req.query.max) : 0
+
+    console.log(min, max)
+
+    const nameFilter = name ? {name: {$regex : name, $options: 'i'}}  : {}
+
+    const categoryFilter = category ? {category} : {}
+
+    const priceFilter = min && max  ?  {price: {$gte : min, $lte: max}} : {}
+
+    console.log(priceFilter)
+
+   filter = {...filter, ...nameFilter, ...categoryFilter, ...priceFilter}
+
+   console.log(filter)
 
     const products = await Product.find(filter)
 
@@ -222,6 +236,23 @@ const uploadImage  = catchAsync(async (req, res, next) => {
 const uploader = upload.single('image');
 
 
+
+const getCategories = catchAsync(async (req, res, next) => {
+
+
+
+    const categories = await Product.find().distinct('category')
+
+
+    res.status(200).json({
+        status: true,
+        data: categories
+    })
+
+
+})
+
+
 module.exports = {
     getAllProducts,
     getProduct,
@@ -230,5 +261,6 @@ module.exports = {
     updateProduct,
     uploader,
     uploadImage,
-    deleteProduct
+    deleteProduct,
+    getCategories
 }

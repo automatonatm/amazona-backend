@@ -16,6 +16,7 @@ const productRoutes = require('./routes/productRoute')
 const userRoutes = require('./routes/userRoute')
 const authRoutes = require('./routes/authRoute')
 const orderRoutes = require('./routes/orderRoute')
+const categoryRoutes = require('./routes/categoryRoute')
 
 
 
@@ -64,6 +65,7 @@ app.use('/api/v1/products', productRoutes)
 app.use('/api/v1/users', userRoutes)
 app.use('/api/v1/auth', authRoutes)
 app.use('/api/v1/orders', orderRoutes)
+app.use('/api/v1/categories', categoryRoutes)
 
 app.use('/api/v1/config/paypal', (req, res)  => {
     res.send(process.env.PAYPAL_CLIENT_ID || 'sb')

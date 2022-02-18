@@ -1,5 +1,7 @@
 const catchAsync = require('express-async-handler')
 const Order = require('../models/Order')
+const Product = require('../models/Product')
+const User = require('../models/User')
 const AppError = require('../utils/appError.js')
 const {checkOwnerShip} = require('../middleware/auth')
 
@@ -159,6 +161,64 @@ const getOrders = catchAsync(async (req, res, next) => {
 
 
 
+// @desc get  orders
+// @route POST /api/v1/orders/stats
+// @access PUBLIC
+const ordersStats = catchAsync(async (req, res, next) => {
+    const orders = await  Order.aggregate([
+        {
+            $group : {
+                _id: null,
+                totalOrders: {$sum: 1},
+                totalSales: {$sum: '$totalPrice'}
+            }
+        }
+    ])
+
+
+    const users = await  User.aggregate([
+        {
+            $group : {
+                _id: null,
+                totalUser: {$sum: 1},
+            }
+        }
+    ])
+
+    const dailyOrders = await Order.aggregate([
+        {
+            $group: {
+                _id: {$dateToString: {format: '%Y-%m-%d', date: '$createdAt'}},
+                orders: {$sum: 1},
+                sales: {$sum: '$totalPrice'}
+            }
+        },
+        {$sort: {_id: 1}}
+    ])
+
+
+    const productCategories = await  Product.aggregate([
+        {
+            $group : {
+                _id: '$category',
+                total: {$sum: 1},
+            }
+        }
+    ])
+
+    res.status(200).json({
+        status: true,
+        data: {
+            orders,
+            productCategories,
+            dailyOrders,
+            users
+        }
+    })
+
+})
+
+
 
 module.exports = {
     placeOrder,
@@ -166,5 +226,6 @@ module.exports = {
     payOrder,
     getUserOrders,
     getOrders,
-    deliverOrder
+    deliverOrder,
+    ordersStats
 }
